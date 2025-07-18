@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Bounce Trainer</title>
+    <title>Bounce, but Trained</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -175,18 +175,13 @@
             width: 100%;
             box-sizing: border-box;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.26.3/full/pyodide.js"></script>
 </head>
 <body> 
     <div class="sidebar">
-        <a href="index.html" class="active">Training Mode</a>
-        <a href="trained.html">Trained Mode</a>
+        <a href="index.html">Training Mode</a>
+        <a href="trained.html" class="active">Trained Mode</a>
         <a href="play.html">Play Mode</a>
     </div>
     <div class="main-content">
@@ -195,9 +190,15 @@
                 <div style="text-align:center;margin-bottom:1rem;">
                     <span style="display:inline-block;width:2.5rem;height:2.5rem;border:4px solid #2196F3;border-top:4px solid #fff;border-radius:50%;animation:spin 1s linear infinite;"></span>
                 </div>
-                Loading engine...
+                Loading game...
             </div>
         </div>
+        <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        </style>
         <script type="text/javascript">
             // Wake Lock API to prevent screen sleep
             let wakeLock = null;
@@ -226,15 +227,15 @@
               canvas = document.getElementById("canvas");
               pyodide.canvas.setCanvas2D(canvas);
               let href = window.location.href;
-              var link = href.substring(0, href.lastIndexOf('/')) + "/bounce.tar";
+              var link = href.substring(0, href.lastIndexOf('/')) + "/trained.tar";
               let zipResponse = await fetch(link);
               let zipBinary = await zipResponse.arrayBuffer();
-              pyodide.unpackArchive(zipBinary, "tar", { extractDir: "/lib/python3.12/site-packages/bounce" });
+              pyodide.unpackArchive(zipBinary, "tar", { extractDir: "/lib/python3.12/site-packages/trained" });
               pyodide.runPythonAsync(`
     import sys
-    sys.path.append('/lib/python3.12/site-packages/bounce/docs/training-python')
-    import game
-    game.run()
+    sys.path.append('/lib/python3.12/site-packages/trained/docs/trained-python')
+    import trained
+    trained.run()
     `)
               // Fade out loading screen when done
               const loading = document.getElementById('loading-screen');
@@ -243,27 +244,26 @@
             }
             main();
           </script>
-          <div class="demo-header">Bounce Reinforcement Learning</div>
-          <div class="directions-box">
-            <h1>What does it do?</h1>
-            <p>
-                This is a reinforcement learning engine built on one of my <a href="https://nanoticity.github.io/bounce/" target="_blank">previous games</a>. It forces the computer to keep on playing the game and scoring the outcome every single frame. Some of the games are random, where the computer is trying to explore, or trying out the trained moves, where the computer evaluates if what it explored actually works. Random games are faster, and trained games are slower. Once the code starts it takes around 30-35 minutes to train, but can be as much as an hour. But, you can head to the trained page to see it trained fully.
-            </p>
-          </div>
-          <div class="canvas-outer">
-              <div class="mac-buttons-container">
-                  <div class="mac-buttons">
-                      <div class="mac-button mac-close"></div>
-                      <div class="mac-button mac-minimize"></div>
-                      <div class="mac-button mac-maximize"></div>
-                  </div>
-              </div>
-              <div class="canvas-container">
-                  <canvas id="canvas" style="width:fit-content; height:fit-content;"></canvas>
-              </div>
-          </div>
-          <p>Made with <span style="color: #ff0000;">&#9829;</span> By Nano </p>
+        <div class="demo-header">Bounce Reinforcement Learning</div>
+        <div class="directions-box">
+          <h1>What does it do?</h1>
+          <p>
+              This is the result of running the code for about 2 hours, and as you can see, it can reach very high scores. This is made using the pickle library of python in order to save the data from the previous training.
+          </p>
         </div>
+        <div class="canvas-outer">
+            <div class="mac-buttons-container">
+                <div class="mac-buttons">
+                    <div class="mac-button mac-close"></div>
+                    <div class="mac-button mac-minimize"></div>
+                    <div class="mac-button mac-maximize"></div>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvas" style="width:fit-content; height:fit-content;"></canvas>
+            </div>
+        </div>
+        <p>Made with <span style="color: #ff0000;">&#9829;</span> By Nano </p>
     </div>
 </body>
 </html>

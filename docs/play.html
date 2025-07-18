@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Bounce Trainer</title>
+    <title>Bounce, but Trained</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -175,19 +175,14 @@
             width: 100%;
             box-sizing: border-box;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.26.3/full/pyodide.js"></script>
 </head>
 <body> 
     <div class="sidebar">
-        <a href="index.html" class="active">Training Mode</a>
+        <a href="index.html">Training Mode</a>
         <a href="trained.html">Trained Mode</a>
-        <a href="play.html">Play Mode</a>
+        <a href="play.html" class="active">Play Mode</a>
     </div>
     <div class="main-content">
         <div id="loading-screen" style="position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.95);z-index:9999;font-size:2rem;opacity:1;transition:opacity 0.7s cubic-bezier(.4,0,.2,1);">
@@ -195,9 +190,15 @@
                 <div style="text-align:center;margin-bottom:1rem;">
                     <span style="display:inline-block;width:2.5rem;height:2.5rem;border:4px solid #2196F3;border-top:4px solid #fff;border-radius:50%;animation:spin 1s linear infinite;"></span>
                 </div>
-                Loading engine...
+                Loading game...
             </div>
         </div>
+        <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        </style>
         <script type="text/javascript">
             // Wake Lock API to prevent screen sleep
             let wakeLock = null;
@@ -226,15 +227,15 @@
               canvas = document.getElementById("canvas");
               pyodide.canvas.setCanvas2D(canvas);
               let href = window.location.href;
-              var link = href.substring(0, href.lastIndexOf('/')) + "/bounce.tar";
+              var link = href.substring(0, href.lastIndexOf('/')) + "/play.tar";
               let zipResponse = await fetch(link);
               let zipBinary = await zipResponse.arrayBuffer();
-              pyodide.unpackArchive(zipBinary, "tar", { extractDir: "/lib/python3.12/site-packages/bounce" });
+              pyodide.unpackArchive(zipBinary, "tar", { extractDir: "/lib/python3.12/site-packages/play" });
               pyodide.runPythonAsync(`
     import sys
-    sys.path.append('/lib/python3.12/site-packages/bounce/docs/training-python')
-    import game
-    game.run()
+    sys.path.append('/lib/python3.12/site-packages/play/docs/playable-python/')
+    import main
+    main.main()
     `)
               // Fade out loading screen when done
               const loading = document.getElementById('loading-screen');
@@ -243,27 +244,26 @@
             }
             main();
           </script>
-          <div class="demo-header">Bounce Reinforcement Learning</div>
-          <div class="directions-box">
-            <h1>What does it do?</h1>
-            <p>
-                This is a reinforcement learning engine built on one of my <a href="https://nanoticity.github.io/bounce/" target="_blank">previous games</a>. It forces the computer to keep on playing the game and scoring the outcome every single frame. Some of the games are random, where the computer is trying to explore, or trying out the trained moves, where the computer evaluates if what it explored actually works. Random games are faster, and trained games are slower. Once the code starts it takes around 30-35 minutes to train, but can be as much as an hour. But, you can head to the trained page to see it trained fully.
-            </p>
-          </div>
-          <div class="canvas-outer">
-              <div class="mac-buttons-container">
-                  <div class="mac-buttons">
-                      <div class="mac-button mac-close"></div>
-                      <div class="mac-button mac-minimize"></div>
-                      <div class="mac-button mac-maximize"></div>
-                  </div>
-              </div>
-              <div class="canvas-container">
-                  <canvas id="canvas" style="width:fit-content; height:fit-content;"></canvas>
-              </div>
-          </div>
-          <p>Made with <span style="color: #ff0000;">&#9829;</span> By Nano </p>
+        <div class="demo-header">Bounce Reinforcement Learning</div>
+        <div class="directions-box">
+          <h1>What does it do?</h1>
+          <p>
+              This is the original game that is playable by you on arrow keys, or by pressing the left side of the screen and the right side. 
+          </p>
         </div>
+        <div class="canvas-outer">
+            <div class="mac-buttons-container">
+                <div class="mac-buttons">
+                    <div class="mac-button mac-close"></div>
+                    <div class="mac-button mac-minimize"></div>
+                    <div class="mac-button mac-maximize"></div>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvas" style="width:fit-content; height:fit-content;"></canvas>
+            </div>
+        </div>
+        <p>Made with <span style="color: #ff0000;">&#9829;</span> By Nano </p>
     </div>
 </body>
 </html>
