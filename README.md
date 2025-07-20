@@ -8,4 +8,4 @@ This code utilizes Reinforcement learning in which the computer forces the learn
 This demo shows what the code does after being fully trained previously so you don't have to wait like 30 minutes for the code to train fully.
 
 ## Playable
-This is the base game that I submitted for High Seas, just so you can get a sense for what the computer is trying to learn.∫
+This is the base game that I submitted for High Seas, just so you can get a sense for what the computer is trying to learn.
